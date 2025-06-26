@@ -4,6 +4,6 @@ const nextConfig = {
   experimental: {
     // Можно добавить экспериментальные функции при необходимости
   },
-}
+};
 
-module.exports = nextConfig 
+module.exports = nextConfig;
