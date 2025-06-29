@@ -7,12 +7,12 @@ import { UIButton } from "./ui-kit/ui-button";
 
 export function Header({}) {
   return (
-    <header className="p-4 bg-slate-50 shadow">
+    <header className="bg-slate-50 p-4 shadow">
       <div className="container mx-auto">
         <div className="flex justify-between">
           <Image width={32} height={32} src={srcLogo} alt="logo" />
-          <UIButton variant="outline">Играть</UIButton>
-          <div className="flex gap-2 items-center">
+          <UIButton>Играть</UIButton>
+          <div className="flex items-center gap-2">
             <AvatarItem
               src={srcAvatar}
               name="Brad Pitt"

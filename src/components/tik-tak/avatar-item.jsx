@@ -10,18 +10,18 @@ const sizeMap = {
 };
 export function AvatarItem({ src, name, description, size = "md" }) {
   return (
-    <div className="flex gap-2 items-center">
+    <div className="flex items-center gap-2">
       <div
         className={`${cn(
-          "relative bg-gray-200 rounded-full overflow-hidden",
-          sizeMap[size]
+          "relative overflow-hidden rounded-full bg-gray-200",
+          sizeMap[size],
         )}`}
       >
         <Image src={src} fill className="object-cover" alt="Avatar" />
       </div>
       <div>
         <div className="leading-tight">{name}</div>
-        <div className="text-gray-500 text-sm">{description}</div>
+        <div className="text-sm text-gray-500">{description}</div>
       </div>
     </div>
   );
