@@ -1,7 +1,5 @@
-import clsx from "clsx";
 import { ArrowLeft, HistoryIcon, StarIcon, UserRoundIcon } from "lucide-react";
 import Link from "next/link";
-import { twMerge } from "tailwind-merge";
 import { cn } from "../../utils/cn";
 
 export function GameTitle({ className }) {

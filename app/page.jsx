@@ -1,5 +1,6 @@
 "use client";
 import { Header } from "../src/components/Header";
+import { GameBoard, GameInfo, GameTitle } from "../src/components/tik-tak";
 
 export default function HomePage() {
   return (
