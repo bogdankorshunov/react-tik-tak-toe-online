@@ -1,28 +1,11 @@
-import { Circle, X } from "lucide-react";
 import { UIButton } from "../ui-kit/ui-button";
 import { cn } from "../../utils/cn";
-import { useState } from "react";
-import { GAME_SYMBOL, GAME_SYMBOL_ORDER } from "../../constants";
 import { GameSymbol } from "./game-symbol";
+import { useGameState } from "./useGameState";
 
-const getNextMove = (currentMove) => {
-  console.log("currentMove", currentMove);
-
-  const nextMoveIndex = GAME_SYMBOL_ORDER.indexOf(currentMove) + 1;
-  console.log(nextMoveIndex);
-
-  return nextMoveIndex ?? GAME_SYMBOL_ORDER[0];
-};
-
-export function GameBoard({ className }) {
-  const [cells, setCells] = useState(() => new Array(19 * 19).fill(null));
-  const [currentMove, setCurrentMove] = useState(GAME_SYMBOL.ZERO);
-
-  const nextMove = getNextMove(currentMove);
-
-  const handleNextMove = (index) => {
-    setCurrentMove((prev) => getNextMove(prev));
-  };
+export function GameBoard({ className, playersCount }) {
+  const { cells, currentMove, handleNextMove, nextMove } =
+    useGameState(playersCount);
   const actions = (
     <>
       <UIButton>Ничья</UIButton>
@@ -40,7 +23,9 @@ export function GameBoard({ className }) {
         <GameGrid>
           {cells.map((value, index) => {
             return (
-              <GameCell key={index} onClick={() => handleNextMove(index)} />
+              <GameCell key={index} onClick={() => handleNextMove(index)}>
+                {value && <GameSymbol symbol={value} />}
+              </GameCell>
             );
           })}
         </GameGrid>
@@ -57,14 +42,13 @@ function GameGrid({ children }) {
   );
 }
 
-function GameCell({ onClick }) {
+function GameCell({ onClick, children }) {
   return (
     <button
       onClick={onClick}
       className="-mt-px -ml-px flex items-center justify-center border border-gray-300"
     >
-      {/* <Circle size={20} className="text-teal-500" /> */}
-      {/* <X size={20} className="text-red-500" /> */}
+      {children}
     </button>
   );
 }
@@ -83,14 +67,11 @@ function GameMoveInfo({ actions, currentMove, nextMove }) {
       <div className="flex flex-col gap-0.5">
         <div className="flex items-center gap-1 text-xl font-medium">
           <span>Ход:</span>
-          <GameSymbol symbol={currentMove} className="mt-1 text-teal-500" />
-          {/* <Circle size={16} strokeWidth={3} className="mt-1 text-teal-500" /> */}
+          <GameSymbol symbol={currentMove} className="mt-1" />
         </div>
         <div className="flex items-center gap-1">
           <span className="text-sm text-gray-500">Следующий:</span>
-          <GameSymbol symbol={nextMove} className="text-red-500" />
-
-          {/* <X size={20} className="text-red-500" /> */}
+          <GameSymbol symbol={nextMove} />
         </div>
       </div>
       <div className="flex gap-4">{actions}</div>

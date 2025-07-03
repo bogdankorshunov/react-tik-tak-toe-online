@@ -19,9 +19,9 @@ export function AvatarItem({ src, name, description, size = "md" }) {
       >
         <Image src={src} fill className="object-cover" alt="Avatar" />
       </div>
-      <div>
-        <div className="leading-tight">{name}</div>
-        <div className="text-sm text-gray-500">{description}</div>
+      <div className="min-w-0 flex-1">
+        <div className="truncate leading-tight">{name}</div>
+        <div className="truncate text-sm text-gray-500">{description}</div>
       </div>
     </div>
   );

@@ -1,43 +1,52 @@
-import { Circle, X } from "lucide-react";
-import { AvatarItem } from "./avatar-item";
 import srcAvatar from "../../../public/images/avatar.jpg";
+import { GAME_SYMBOL } from "../../constants";
 import { cn } from "../../utils/cn";
-
-export function GameInfo({ className }) {
+import { Profile } from "./Profile";
+const players = [
+  {
+    id: "1",
+    name: "Brad Pitt 1",
+    rating: "4",
+    symbol: GAME_SYMBOL.CROSS,
+    avatar: srcAvatar,
+  },
+  {
+    id: "2",
+    name: "Brad Pitt 3",
+    rating: "44",
+    symbol: GAME_SYMBOL.ZERO,
+    avatar: srcAvatar,
+  },
+  {
+    id: "3",
+    name: "Brad Pitt 3",
+    rating: "444",
+    symbol: GAME_SYMBOL.TRIANGLE,
+    avatar: srcAvatar,
+  },
+  {
+    id: "4",
+    name: "Brad Pitt 4",
+    rating: "4444",
+    symbol: GAME_SYMBOL.SQUARE,
+    avatar: srcAvatar,
+  },
+];
+export function GameInfo({ className, playersCount }) {
   return (
     <div
-      className={`${cn("flex items-center justify-between gap-2 rounded-xl border border-gray-100 bg-white px-8 py-6 shadow-xl", className)}`}
+      className={`${cn("grid grid-cols-2 gap-8 rounded-xl border border-gray-100 bg-white px-8 py-6 shadow-xl", className)}`}
     >
-      {/* Avatar with icon */}
-      <div className="relative">
-        <div className="absolute -top-2 -left-2 z-10 rounded-full bg-white p-1 shadow">
-          <X size={16} className="text-red-500" />
-        </div>
-        <AvatarItem
-          src={srcAvatar}
-          name="Brad Pitt"
-          description="Рейтинг: 322"
+      {players.slice(0, playersCount).map((player, index) => (
+        <Profile
+          name={player.name}
+          description={`Рейтинг: ${player.rating} `}
+          src={player.avatar}
+          key={player.id}
+          symbol={player.symbol}
+          position={index % 2 === 0 ? "left" : "right"}
         />
-      </div>
-      {/* Avatar with icon */}
-      <div className="mx-2 h-8 w-[1px] bg-gray-300"></div>
-      <div className="flex gap-10 text-lg font-medium">
-        <div>01:08</div>
-        <div className="text-orange-600">00:08</div>
-      </div>
-      <div className="mx-2 h-8 w-[1px] bg-gray-300"></div>
-      {/* Avatar with icon */}
-      <div className="relative">
-        <div className="absolute -top-2 -left-2 z-10 rounded-full bg-white p-1 shadow">
-          <Circle size={16} className="text-teal-500" />
-        </div>
-        <AvatarItem
-          src={srcAvatar}
-          name="Brad Pitt"
-          description="Рейтинг: 322"
-        />
-      </div>
-      {/* Avatar with icon */}
+      ))}
     </div>
   );
 }
