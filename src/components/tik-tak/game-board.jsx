@@ -3,9 +3,14 @@ import { cn } from "../../utils/cn";
 import { GameSymbol } from "./game-symbol";
 import { useGameState } from "./useGameState";
 
-export function GameBoard({ className, playersCount }) {
-  const { cells, currentMove, handleNextMove, nextMove } =
-    useGameState(playersCount);
+export function GameBoard({
+  className,
+  playersCount,
+  cells,
+  currentMove,
+  nextMove,
+  handleNextMove,
+}) {
   const actions = (
     <>
       <UIButton>Ничья</UIButton>
