@@ -80,6 +80,16 @@ function PlayersInfo({ player, position, isRunning }) {
       };
     }
   }, [isRunning]);
+
+  const getTimerColor = () => {
+    if (!isRunning) {
+      return "text-gray-400";
+    }
+    if (isDanger) {
+      return "text-orange-600";
+    }
+    return "text-gray-900";
+  };
   return (
     <div className="flex items-center gap-5">
       <Profile
@@ -98,7 +108,7 @@ function PlayersInfo({ player, position, isRunning }) {
       <div
         className={cn(
           `flex flex-shrink-0 items-center text-lg font-medium`,
-          isDanger && "text-orange-600",
+          getTimerColor(),
         )}
       >
         <div>

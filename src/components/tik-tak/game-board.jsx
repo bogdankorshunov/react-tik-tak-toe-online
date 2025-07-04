@@ -2,6 +2,7 @@ import { UIButton } from "../ui-kit/ui-button";
 import { cn } from "../../utils/cn";
 import { GameSymbol } from "./game-symbol";
 import { useGameState } from "./useGameState";
+import { isWinningCell } from "../../utils/gameWinnerUtils";
 
 export function GameBoard({
   className,
@@ -9,49 +10,69 @@ export function GameBoard({
   cells,
   currentMove,
   nextMove,
+  gameResult,
   handleNextMove,
+  resetGame,
+  boardSize = 19,
 }) {
   const actions = (
     <>
-      <UIButton>Ничья</UIButton>
+      <UIButton onClick={resetGame}>Новая игра</UIButton>
       <UIButton variant="outline">Сдаться</UIButton>
     </>
   );
+
   return (
     <GameBoardLayout>
       <GameMoveInfo
         actions={actions}
         currentMove={currentMove}
         nextMove={nextMove}
+        gameResult={gameResult}
       />
-      <div className="grid grid-cols-[repeat(19,_30px)] grid-rows-[repeat(19,_30px)]">
-        <GameGrid>
-          {cells.map((value, index) => {
-            return (
-              <GameCell key={index} onClick={() => handleNextMove(index)}>
-                {value && <GameSymbol symbol={value} />}
-              </GameCell>
-            );
-          })}
-        </GameGrid>
-      </div>
+      <GameGrid boardSize={boardSize}>
+        {cells.map((value, index) => {
+          const isWinning = gameResult?.winningCells
+            ? isWinningCell(index, gameResult.winningCells)
+            : false;
+
+          return (
+            <GameCell
+              key={index}
+              onClick={() => handleNextMove(index)}
+              isWinning={isWinning}
+            >
+              {value && <GameSymbol symbol={value} />}
+            </GameCell>
+          );
+        })}
+      </GameGrid>
     </GameBoardLayout>
   );
 }
 
-function GameGrid({ children }) {
+function GameGrid({ children, boardSize }) {
   return (
-    <div className="grid grid-cols-[repeat(19,_30px)] grid-rows-[repeat(19,_30px)]">
+    <div
+      className="grid gap-0"
+      style={{
+        gridTemplateColumns: `repeat(${boardSize}, 30px)`,
+        gridTemplateRows: `repeat(${boardSize}, 30px)`,
+      }}
+    >
       {children}
     </div>
   );
 }
 
-function GameCell({ onClick, children }) {
+function GameCell({ onClick, children, isWinning }) {
   return (
     <button
       onClick={onClick}
-      className="-mt-px -ml-px flex items-center justify-center border border-gray-300"
+      className={cn(
+        "-mt-px -ml-px flex items-center justify-center border border-gray-300",
+        isWinning && "border-green-400 bg-green-200",
+      )}
     >
       {children}
     </button>
@@ -66,7 +87,25 @@ function GameBoardLayout({ children, className }) {
   );
 }
 
-function GameMoveInfo({ actions, currentMove, nextMove }) {
+function GameMoveInfo({ actions, currentMove, nextMove, gameResult }) {
+  if (gameResult) {
+    return (
+      <div className="mb-2 flex justify-between">
+        <div className="flex flex-col gap-0.5">
+          {gameResult.isDraw ? (
+            <div className="text-xl font-medium text-gray-600">Ничья!</div>
+          ) : (
+            <div className="flex items-center gap-1 text-xl font-medium text-green-600">
+              <span>Победитель:</span>
+              <GameSymbol symbol={gameResult.winner} className="mt-1" />
+            </div>
+          )}
+        </div>
+        <div className="flex gap-4">{actions}</div>
+      </div>
+    );
+  }
+
   return (
     <div className="mb-2 flex justify-between">
       <div className="flex flex-col gap-0.5">
