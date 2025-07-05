@@ -11,6 +11,7 @@ export function GameBoard({
   currentMove,
   nextMove,
   gameResult,
+  blockedPlayers,
   handleNextMove,
   resetGame,
   boardSize = 19,
@@ -22,6 +23,8 @@ export function GameBoard({
     </>
   );
 
+  const isCurrentPlayerBlocked = blockedPlayers?.includes(currentMove);
+
   return (
     <GameBoardLayout>
       <GameMoveInfo
@@ -29,6 +32,7 @@ export function GameBoard({
         currentMove={currentMove}
         nextMove={nextMove}
         gameResult={gameResult}
+        isCurrentPlayerBlocked={isCurrentPlayerBlocked}
       />
       <GameGrid boardSize={boardSize}>
         {cells.map((value, index) => {
@@ -41,6 +45,7 @@ export function GameBoard({
               key={index}
               onClick={() => handleNextMove(index)}
               isWinning={isWinning}
+              disabled={isCurrentPlayerBlocked}
             >
               {value && <GameSymbol symbol={value} />}
             </GameCell>
@@ -65,14 +70,16 @@ function GameGrid({ children, boardSize }) {
   );
 }
 
-function GameCell({ onClick, children, isWinning }) {
+function GameCell({ onClick, children, isWinning, disabled }) {
   return (
     <button
       onClick={onClick}
       className={cn(
         "-mt-px -ml-px flex items-center justify-center border border-gray-300",
         isWinning && "border-green-400 bg-green-200",
+        disabled && "cursor-not-allowed opacity-50",
       )}
+      disabled={disabled}
     >
       {children}
     </button>
@@ -87,7 +94,13 @@ function GameBoardLayout({ children, className }) {
   );
 }
 
-function GameMoveInfo({ actions, currentMove, nextMove, gameResult }) {
+function GameMoveInfo({
+  actions,
+  currentMove,
+  nextMove,
+  gameResult,
+  isCurrentPlayerBlocked,
+}) {
   if (gameResult) {
     return (
       <div className="mb-2 flex justify-between">
@@ -109,10 +122,17 @@ function GameMoveInfo({ actions, currentMove, nextMove, gameResult }) {
   return (
     <div className="mb-2 flex justify-between">
       <div className="flex flex-col gap-0.5">
-        <div className="flex items-center gap-1 text-xl font-medium">
-          <span>Ход:</span>
-          <GameSymbol symbol={currentMove} className="mt-1" />
-        </div>
+        {isCurrentPlayerBlocked ? (
+          <div className="flex items-center gap-1 text-xl font-medium text-red-600">
+            <span>Игрок заблокирован:</span>
+            <GameSymbol symbol={currentMove} className="mt-1" />
+          </div>
+        ) : (
+          <div className="flex items-center gap-1 text-xl font-medium">
+            <span>Ход:</span>
+            <GameSymbol symbol={currentMove} className="mt-1" />
+          </div>
+        )}
         <div className="flex items-center gap-1">
           <span className="text-sm text-gray-500">Следующий:</span>
           <GameSymbol symbol={nextMove} />

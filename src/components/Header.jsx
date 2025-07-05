@@ -1,5 +1,3 @@
-import Image from "next/image";
-import srcLogo from "../../public/images/logo.svg";
 import srcAvatar from "../../public/images/avatar.jpg";
 import { ChevronDown } from "lucide-react";
 import { AvatarItem } from "./tik-tak/avatar-item";
@@ -10,7 +8,7 @@ export function Header({}) {
     <header className="bg-slate-50 p-4 shadow">
       <div className="container mx-auto">
         <div className="flex justify-between">
-          <Image width={32} height={32} src={srcLogo} alt="logo" />
+          <img src="/images/logo.svg" alt="logo" width={32} height={32} />
           <UIButton>Играть</UIButton>
           <div className="flex items-center gap-2">
             <AvatarItem

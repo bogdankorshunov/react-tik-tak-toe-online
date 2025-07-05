@@ -17,7 +17,13 @@ export function AvatarItem({ src, name, description, size = "md" }) {
           sizeMap[size],
         )}`}
       >
-        <Image src={src} fill className="object-cover" alt="Avatar" />
+        <Image
+          src={src}
+          fill
+          className="object-cover"
+          alt="Avatar"
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+        />
       </div>
       <div className="min-w-0 flex-1">
         <div className="truncate leading-tight">{name}</div>

@@ -21,6 +21,8 @@ export default function HomePage() {
     handleNextMove,
     nextMove,
     gameResult,
+    blockedPlayers,
+    blockPlayer,
     resetGame,
   } = useGameState(playersCount, boardSize, winLength);
 
@@ -34,6 +36,9 @@ export default function HomePage() {
           className="mb-4"
           playersCount={playersCount}
           currentMove={currentMove}
+          gameResult={gameResult}
+          blockedPlayers={blockedPlayers}
+          blockPlayer={blockPlayer}
         />
 
         <GameBoard
@@ -43,6 +48,7 @@ export default function HomePage() {
           handleNextMove={handleNextMove}
           nextMove={nextMove}
           gameResult={gameResult}
+          blockedPlayers={blockedPlayers}
           resetGame={resetGame}
           boardSize={boardSize}
         />

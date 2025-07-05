@@ -33,7 +33,14 @@ const players = [
     avatar: srcAvatar,
   },
 ];
-export function GameInfo({ className, playersCount, currentMove }) {
+export function GameInfo({
+  className,
+  playersCount,
+  currentMove,
+  gameResult,
+  blockedPlayers,
+  blockPlayer,
+}) {
   return (
     <div
       className={`${cn("grid grid-cols-2 gap-8 rounded-xl border border-gray-100 bg-white px-8 py-6 shadow-xl", className)}`}
@@ -51,6 +58,9 @@ export function GameInfo({ className, playersCount, currentMove }) {
             player={mapperPlayer}
             position={index % 2 === 0 ? "left" : "right"}
             isRunning={currentMove === player.symbol}
+            gameResult={gameResult}
+            isBlocked={blockedPlayers?.includes(player.symbol)}
+            blockPlayer={blockPlayer}
           />
         );
       })}
@@ -58,13 +68,37 @@ export function GameInfo({ className, playersCount, currentMove }) {
   );
 }
 
-function PlayersInfo({ player, position, isRunning }) {
-  const [seconds, setSeconds] = useState(60);
+function PlayersInfo({
+  player,
+  position,
+  isRunning,
+  gameResult,
+  isBlocked,
+  blockPlayer,
+}) {
+  const [seconds, setSeconds] = useState(5);
   const minStr = String(Math.floor(seconds / 60)).padStart(2, "0");
   const secStr = String(seconds % 60).padStart(2, "0");
   const isDanger = seconds < 10;
+  const hasWinner = gameResult?.winner || gameResult?.isDraw;
 
   useEffect(() => {
+    if (seconds === 0 && isRunning && !hasWinner && !isBlocked && blockPlayer) {
+      blockPlayer(player.symbol);
+    }
+  }, [seconds, isRunning, hasWinner, isBlocked, blockPlayer, player.symbol]);
+
+  useEffect(() => {
+    if (hasWinner) {
+      setSeconds(5);
+      return;
+    }
+
+    if (isBlocked) {
+      setSeconds(0);
+      return;
+    }
+
     if (isRunning) {
       const interval = setInterval(() => {
         setSeconds((s) => {
@@ -76,12 +110,17 @@ function PlayersInfo({ player, position, isRunning }) {
       }, 1000);
       return () => {
         clearInterval(interval);
-        setSeconds(60);
       };
     }
-  }, [isRunning]);
+  }, [isRunning, hasWinner, isBlocked]);
 
   const getTimerColor = () => {
+    if (hasWinner) {
+      return "text-gray-300";
+    }
+    if (isBlocked) {
+      return "text-red-500";
+    }
     if (!isRunning) {
       return "text-gray-400";
     }
@@ -91,7 +130,7 @@ function PlayersInfo({ player, position, isRunning }) {
     return "text-gray-900";
   };
   return (
-    <div className="flex items-center gap-5">
+    <div className={cn("flex items-center gap-5", isBlocked && "opacity-60")}>
       <Profile
         name={player.name}
         description={`Рейтинг: ${player.rating} `}
@@ -111,9 +150,7 @@ function PlayersInfo({ player, position, isRunning }) {
           getTimerColor(),
         )}
       >
-        <div>
-          {minStr}:{secStr}
-        </div>
+        <div>{isBlocked ? "00:00" : `${minStr}:${secStr}`}</div>
       </div>
     </div>
   );
