@@ -10,6 +10,7 @@ export default function RootLayout({ children }) {
     <html lang="ru">
       <body>
         <div>{children}</div>
+        <div id="modals"></div>
       </body>
     </html>
   );

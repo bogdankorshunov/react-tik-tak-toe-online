@@ -7,6 +7,8 @@ import {
   GameTitle,
   useGameState,
 } from "../src/components/tik-tak";
+import { UIModal } from "../src/components/ui-kit/ui-modal";
+import { UIButton } from "../src/components/ui-kit/ui-button";
 
 export default function HomePage() {
   const [playersCount, setPlayersCount] = useState(4);
@@ -29,6 +31,23 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-gray-50 pb-4">
       <Header />
+      <UIModal
+        isOpen={gameResult}
+        onClose={() => {
+          console.log("close");
+        }}
+      >
+        <UIModal.Header>Игра завершена</UIModal.Header>
+        <UIModal.Body>
+          <div>
+            Победитель: <span className="text-blue-400">Bogdan</span>
+          </div>
+        </UIModal.Body>
+        <UIModal.Footer>
+          <UIButton variant="outline">Вернуться</UIButton>
+          <UIButton>Играть снова</UIButton>
+        </UIModal.Footer>
+      </UIModal>
       <div className="container mx-auto max-w-2xl px-4">
         <GameTitle className="mt-20 mb-10" playersCount={playersCount} />
 

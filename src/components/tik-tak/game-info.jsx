@@ -76,7 +76,7 @@ function PlayersInfo({
   isBlocked,
   blockPlayer,
 }) {
-  const [seconds, setSeconds] = useState(5);
+  const [seconds, setSeconds] = useState(1);
   const minStr = String(Math.floor(seconds / 60)).padStart(2, "0");
   const secStr = String(seconds % 60).padStart(2, "0");
   const isDanger = seconds < 10;
