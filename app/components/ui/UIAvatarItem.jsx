@@ -1,0 +1,34 @@
+import { cn } from "@/lib/cn";
+import Image from "next/image";
+
+const sizeMap = {
+  xs: "w-6 h-6", // 24 px
+  sm: "w-8 h-8", // 32 px
+  md: "w-10 h-10", // 40 px (значение «по умолчанию»)
+  lg: "w-12 h-12", // 48 px
+  xl: "w-16 h-16", // 64 px
+};
+export function UIAvatarItem({ src, name, description, size = "md" }) {
+  return (
+    <div className="flex items-center gap-2">
+      <div
+        className={`${cn(
+          "relative overflow-hidden rounded-full bg-gray-200",
+          sizeMap[size],
+        )}`}
+      >
+        <Image
+          src={src}
+          fill
+          className="object-cover"
+          alt="Avatar"
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+        />
+      </div>
+      <div className="min-w-0 flex-1">
+        <div className="truncate leading-tight">{name}</div>
+        <div className="truncate text-sm text-gray-500">{description}</div>
+      </div>
+    </div>
+  );
+}
