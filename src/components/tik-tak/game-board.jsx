@@ -1,12 +1,9 @@
 import { UIButton } from "../ui-kit/ui-button";
 import { cn } from "../../utils/cn";
 import { GameSymbol } from "./game-symbol";
-import { useGameState } from "./useGameState";
 import { isWinningCell } from "../../utils/gameWinnerUtils";
 
 export function GameBoard({
-  className,
-  playersCount,
   cells,
   currentMove,
   nextMove,
